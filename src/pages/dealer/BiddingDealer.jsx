@@ -13,22 +13,20 @@ import { Link,useParams } from "react-router-dom";
 import { MdPendingActions } from "react-icons/md";
 import StatusDialogeBox from "../../ui/StatusDialogeBox";
 import BiddingDailogeBox from "../../ui/BiddingDialogeBox";
-import BiddingSetTime from "../../ui/BiddingSetTime";
+import PlaceBid from "./PlaceBid";
 
 
 const BiddingDealer = () => {
-  const {userId} = useParams()
-  console.log(userId)
-  const { data, isLoading, error } = useBiddingCarByDealerIdQuery();
+  const {id} = useParams()
+  console.log(id)
+  const { data, isLoading,error } = useBiddingCarByDealerIdQuery();
   console.log(data);
   
   if (isLoading) {
     return <p>Loading..</p>;
   }
-
-  if (error) {
-    console.log(error);
-  }
+  const userId = data[0].userId; // Access userId from the first object
+  console.log('User ID:', userId);
   const columns = [
     {
       Header: "ID",
@@ -72,20 +70,7 @@ const BiddingDealer = () => {
         );
       },
     },
-    {
-      Header: "Set Time",
-      accessor: "",
-      Cell: (cell) => {
-        console.log(cell.row.values.carStatus);
-        return (
-          <div>
-            <div className="flex gap-2 justify-center items-center  ">
-             <BiddingSetTime status={cell.row.values.carStatus}/>
-             </div>
-          </div>
-        );
-      },
-    },
+  
     {
       Header: "Start Bidiing",
       accessor: "",
@@ -95,6 +80,21 @@ const BiddingDealer = () => {
           <div>
             <div className="flex gap-2 justify-center items-center  ">
              <BiddingDailogeBox/>
+             </div>
+          </div>
+        );
+      },
+    },
+
+    {
+      Header: "Place Bid",
+      accessor: "",
+      Cell: (cell) => {
+        console.log(cell.row.values.carStatus);
+        return (
+          <div>
+            <div className="flex gap-2 justify-center items-center  ">
+             <PlaceBid userid={userId} id={id}/>
              </div>
           </div>
         );
@@ -136,7 +136,7 @@ const BiddingDealer = () => {
               </Link>
 
               <Link
-                to={`/admin/dealer/edit/${cell.row.values.userId}/${cell.row.values.dealer_id}`}
+                to={`/bidding/${cell.row.values.dealer_id}/editcar`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -187,9 +187,12 @@ const BiddingDealer = () => {
     dealerApiData = data;
   }
   console.log(dealerApiData);
+  
   return (
     <>
-      <Card className="h-full w-full">
+     {error?.status===404 ? (
+           <p className="text-3xl font-semibold ">No Data Available</p>
+        ):( <Card className="h-full w-full">
         <CardHeader floated={false} shadow={false} className="rounded-none">
           <div className=" flex items-center justify-between gap-8">
             <div>
@@ -201,13 +204,13 @@ const BiddingDealer = () => {
               </Typography>
             </div>
             <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-              <Link to={`/bidding/1011/addcar`}>
+              <Link to={`/bidding/1207/addcar`}>
                 <Button>Add Car</Button>
               </Link>
             </div>
           </div>
         </CardHeader>
-        <CardBody className="overflow-scroll px-0">
+       <CardBody className="overflow-scroll px-0">
           <TableComponent columns={columns} data={dealerApiData} />
         </CardBody>
         <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
@@ -237,7 +240,9 @@ const BiddingDealer = () => {
             </Button>
           </div>
         </CardFooter>
-      </Card>
+        
+      </Card>)}
+     
     </>
   );
 };

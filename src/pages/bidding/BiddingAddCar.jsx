@@ -2,8 +2,15 @@ import { useState } from "react";
 import React from "react";
 import Inputs from "../../forms/Inputs";
 import { Textarea } from "@material-tailwind/react";
+import {useBiddingCarRegisterMutation} from "../../services/biddingAPI"
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function BiddingAddCar() {
+
+  const {userid} = useParams()
+  console.log(userid);
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     //features
     acFeature: false,
@@ -34,9 +41,9 @@ export default function BiddingAddCar() {
     dealer_id: "",
   });
 
- 
+ const [biddingCarRegister] = useBiddingCarRegisterMutation()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Prepare the form data to send to the backend
@@ -87,11 +94,20 @@ export default function BiddingAddCar() {
 
       year: formData.year,
 
-      // dealer_id: dealer_id,
+      userId: userid,
 
       date: "2023-07-19",
     };
     console.log(data);
+
+    try {
+      const { data1} = await biddingCarRegister(data);
+      console.log(data1)
+      alert("Car Added")
+      navigate(-1)
+    } catch (error) {
+      console.log(error)
+    }
    
   };
 

@@ -9,7 +9,8 @@ import {
   Input,
 } from "@material-tailwind/react";
 
-import {useCreateBiddingMutation} from "../services/biddingAPI"
+import {useCreateBiddingMutation,useStartBiddingSetTimeMutation} from "../services/biddingAPI"
+
  
 export default function BiddingDailogeBox() {
   const [open, setOpen] = React.useState(false);
@@ -18,14 +19,20 @@ export default function BiddingDailogeBox() {
 
   const [bidding , setBidding] = React.useState({
     createdAt : "",
-    closingTime : ""
+    closingTime : "",
   })
+
+  const [settime , setSettime] = React.useState("")
+  const [startBiddingSetTime] = useStartBiddingSetTimeMutation();
 
   const [createBidding] = useCreateBiddingMutation()
 
   async function formsubmit () {
      const res = await createBidding(bidding);
      console.log(res)
+
+     const res1 = await  startBiddingSetTime (settime)
+console.log(res1)
      handleOpen()
   }
 
@@ -56,12 +63,15 @@ export default function BiddingDailogeBox() {
           unmount: { scale: 0.9, y: -100 },
         }}
       >
-        <DialogHeader>Its a simple dialog.</DialogHeader>
+        <DialogHeader>Start Bidding.</DialogHeader>
         <DialogBody>
 
         <Input label="Created at" value={bidding.createdAt} onChange={handleCreatedAtChange} />
         <div className="mt-5">
          <Input label="Closing time" value={bidding.closingTime} onChange={handleClosingTimeChange} />
+        </div>
+        <div className="mt-5">
+          <Input label="set time" value={settime} onChange={(e) => setSettime(e.target.value)}/>
         </div>
        
         </DialogBody>

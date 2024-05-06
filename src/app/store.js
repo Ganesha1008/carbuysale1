@@ -7,6 +7,7 @@ import { carApi } from '../services/carAPI';
 import { dealerAPI } from '../services/dealerAPI';
 import { biddingAPI } from '../services/biddingAPI';
 import { StartbiddingAPI } from '../services/StartbiddingAPI';
+import { placebidAPI } from '../services/placingbidApi';
 
 export const store = configureStore({
   reducer: {
@@ -16,7 +17,8 @@ export const store = configureStore({
     [carApi.reducerPath]:carApi.reducer,
     [dealerAPI.reducerPath]:dealerAPI.reducer,
     [biddingAPI.reducerPath]:biddingAPI.reducer,
-    [StartbiddingAPI.reducerPath]:StartbiddingAPI.reducer
+    [StartbiddingAPI.reducerPath]:StartbiddingAPI.reducer,
+    [placebidAPI.reducerPath]:placebidAPI.reducer
   },
   middleware:(getDefaultMiddleware)=>
   getDefaultMiddleware().concat(apiSlice.middleware),

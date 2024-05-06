@@ -3,8 +3,12 @@ import { useState } from "react";
 import React from "react";
 import Inputs from "../../forms/Inputs";
 import { Textarea } from "@material-tailwind/react";
+import {useBiddingcarUpdateMutation} from "../../services/biddingAPI"
+import { useParams } from "react-router-dom";
+
 
 export default function BiddingEditCar() {
+  const {  carId } = useParams();
   const [formData, setFormData] = useState({
     //features
     acFeature: false,
@@ -35,9 +39,9 @@ export default function BiddingEditCar() {
     dealer_id: "",
   });
 
- 
+ const [biddingcarUpdate] = useBiddingcarUpdateMutation();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Prepare the form data to send to the backend
@@ -92,6 +96,13 @@ export default function BiddingEditCar() {
 
       date: "2023-07-19",
     };
+
+    try {
+      const res = await biddingcarUpdate({data,carId});
+      console.log(res);
+    } catch (error) {
+      console.log(error)
+    }
     console.log(data);
    
   };

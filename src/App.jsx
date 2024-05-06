@@ -75,7 +75,7 @@ export default function App() {
           </Route>
 
           <Route path="/bidding" element={<BiddingMainPage />} />
-          <Route path="/bidding/:id/addcar" element={<BiddingAddCar />} />
+          <Route path="/bidding/:userid/addcar" element={<BiddingAddCar />} />
           <Route path="/bidding/:id/editcar" element={<BiddingEditCar />} />
           <Route path="/bidding/:id/:carid/settimer" element={<SetTimer />} />
           <Route path="/car/:CarId/pendingreq" element={<BiddingDealerPendingReq/>}/>

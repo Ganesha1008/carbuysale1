@@ -27,7 +27,7 @@ const SellForCar = () => {
   const { data, isLoading, error } = useDealerIdByCarQuery({ id, pageNo });
   console.log(data);
   
-  // const carstatus = data.list
+
  
   if (isLoading) {
     return <p>Loading...</p>;
